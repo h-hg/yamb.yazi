@@ -117,13 +117,14 @@ local generate_key = function(bookmarks)
   return nil
 end
 
-local action_save = function(mb_path, bookmarks)
-  local path = get_hovered_path()
-  if #path == 0 then
+local action_save = function(mb_path, bookmarks, path)
+  if path == nil or #path == 0 then
     return
   end
+
+  local path_obj = bookmarks[path]
   -- check tag
-  local tag = path:match(".*[\\/]([^\\/]+)[\\/]?$")
+  local tag = path_obj and path_obj.tag or path:match(".*[\\/]([^\\/]+)[\\/]?$")
   while true do
     local value, event = ya.input({
       title = "Tag (alias name)",
@@ -162,7 +163,7 @@ local action_save = function(mb_path, bookmarks)
     end
   end
   -- check key
-  local key = generate_key(bookmarks)
+  local key = path_obj and path_obj.key or generate_key(bookmarks)
   while true do
     local value, event = ya.input({
       title = "Key (1 character, optional)",
@@ -302,7 +303,7 @@ return {
     end
     local mb_path, cli, bookmarks = get_state_attr("path"), get_state_attr("cli"), get_state_attr("bookmarks")
     if action == "save" then
-      action_save(mb_path, bookmarks)
+      action_save(mb_path, bookmarks, get_hovered_path())
     elseif action == "delete_by_key" then
       action_delete(mb_path, bookmarks, which_find(bookmarks))
     elseif action == "delete_by_fzf" then
@@ -313,6 +314,10 @@ return {
       action_jump(bookmarks, which_find(bookmarks))
     elseif action == "jump_by_fzf" then
       action_jump(bookmarks, fzf_find(cli, mb_path))
+    elseif action == "rename_by_key" then
+      action_save(mb_path, bookmarks, which_find(bookmarks))
+    elseif action == "rename_by_fzf" then
+      action_save(mb_path, bookmarks, fzf_find(cli, mb_path))
     end
   end,
 }

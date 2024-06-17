@@ -3,7 +3,7 @@
 A [Yazi](https://github.com/sxyazi/yazi) plugin for bookmark management, supporting the following features
 
 - Persistent bookmarks. No bookmarks are lost after you close yazi.
-- Quickly jump to a bookmark by keymap.
+- Quickly jump, delete, and rename a bookmark by keymap.
 - Support fuzzy search through [fzf](https://github.com/junegunn/fzf).
 - Configure your bookmarks using Lua language.
 
@@ -29,8 +29,7 @@ Add this to your `init.lua`
 local bookmarks = {}
 
 local path_sep = package.config:sub(1, 1)
-local home_path = ya.target_family() == "windows" and os.getenv("HOMEDRIVE") .. os.getenv("HOMEPATH") or
-    os.getenv("HOME")
+local home_path = ya.target_family() == "windows" and os.getenv("USERPROFILE") or os.getenv("HOME")
 if ya.target_family() == "windows" then
   table.insert(bookmarks, {
     tag = "Scoop Local",
@@ -95,4 +94,14 @@ desc = "Delete bookmark by fzf"
 on = [ "u", "A" ]
 run = "plugin yamb --args=delete_all"
 desc = "Delete all bookmarks"
+
+[[manager.prepend_keymap]]
+on = [ "u", "r" ]
+run = "plugin yamb --args=rename_by_key"
+desc = "Rename bookmark by key"
+
+[[manager.prepend_keymap]]
+on = [ "u", "R" ]
+run = "plugin yamb --args=rename_by_fzf"
+desc = "Rename bookmark by fzf"
 ```
