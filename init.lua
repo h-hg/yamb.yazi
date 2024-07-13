@@ -25,12 +25,39 @@ local set_bookmarks = ya.sync(function(state, path, value)
   state.bookmarks[path] = value
 end)
 
+local sort_bookmarks = function(bookmarks, key1, key2, reverse)
+  reverse = reverse or false
+  table.sort(bookmarks, function(x, y)
+    local cmp = true
+    if x[key1] == nil and y[key1] == nil then
+      cmp = x[key2] < y[key2]
+    elseif x[key1] == nil then
+      cmp = false
+    elseif y[key1] == nil then
+      cmp = true
+    else
+      cmp = x[key1] < y[key1]
+    end
+    if reverse then
+      return not cmp
+    else
+      return cmp
+    end
+  end)
+  return bookmarks
+end
+
 local save_to_file = function(mb_path, bookmarks)
   local file = io.open(mb_path, "w")
   if file == nil then
     return
   end
+  local array = {}
   for _, item in pairs(bookmarks) do
+    table.insert(array, item)
+  end
+  sort_bookmarks(array, "tag", "key", true)
+  for _, item in ipairs(array) do
     file:write(string.format("%s\t%s\t%s\n", item.tag, item.path, item.key))
   end
   file:close()
@@ -58,6 +85,7 @@ local which_find = function(bookmarks)
       table.insert(cands, { desc = item.tag, on = item.key, path = item.path })
     end
   end
+  sort_bookmarks(cands, "on", "desc", false)
   if #cands == 0 then
     ya.notify {
       title = "Bookmarks",
