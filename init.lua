@@ -305,9 +305,9 @@ return {
     end
 
     -- init the bookmarks
-    state.bookmarks = {}
+    local bookmarks = {}
     for _, item in pairs(options.bookmarks or {}) do
-      state.bookmarks[item.path] = { tag = item.tag, path = item.path, key = item.key }
+      bookmarks[item.path] = { tag = item.tag, path = item.path, key = item.key }
     end
     -- load the config
     local file = io.open(state.path, "r")
@@ -316,13 +316,14 @@ return {
         local tag, path, key = string.match(line, "(.-)\t(.-)\t(.*)")
         if tag and path then
           key = key or ""
-          state.bookmarks[path] = { tag = tag, path = path, key = key }
+          bookmarks[path] = { tag = tag, path = path, key = key }
         end
       end
       file:close()
     end
     -- create bookmarks file to enable fzf
-    save_to_file(state.path, state.bookmarks)
+    save_to_file(state.path, bookmarks)
+    state.bookmarks = bookmarks
   end,
   entry = function(self, args)
     local action = args[1]
