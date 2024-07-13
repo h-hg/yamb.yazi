@@ -28,22 +28,22 @@ end)
 local sort_bookmarks = function(bookmarks, key1, key2, reverse)
   reverse = reverse or false
   table.sort(bookmarks, function(x, y)
-    local cmp = true
     if x[key1] == nil and y[key1] == nil then
-      cmp = x[key2] < y[key2]
+      return x[key2] < y[key2]
     elseif x[key1] == nil then
-      cmp = false
+      return false
     elseif y[key1] == nil then
-      cmp = true
+      return true
     else
-      cmp = x[key1] < y[key1]
-    end
-    if reverse then
-      return not cmp
-    else
-      return cmp
+      return x[key1] < y[key1]
     end
   end)
+  if reverse then
+    local n = #bookmarks
+    for i = 1, math.floor(n / 2) do
+      bookmarks[i], bookmarks[n - i + 1] = bookmarks[n - i + 1], bookmarks[i]
+    end
+  end
   return bookmarks
 end
 
