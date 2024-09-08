@@ -18,6 +18,9 @@ git clone https://github.com/h-hg/yamb.yazi.git ~/.config/yazi/plugins/yamb.yazi
 
 # Windows
 git clone https://github.com/h-hg/yamb.yazi.git $env:APPDATA\yazi\config\plugins\yamb.yazi
+
+# if you are using Yazi version >= 3.0
+ya pack -a h-hg/yamb
 ```
 
 ## Usage
