@@ -112,7 +112,7 @@ local action_jump = function(bookmarks, path, jump_notify)
   else
     ya.manager_emit("reveal", { path })
   end
-  if jump_notify:lower() == "yes" or jump_notify:lower() == "y" then
+  if jump_notify then
     ya.notify {
       title = "Bookmarks",
       content = 'Jump to "' .. tag .. '"',
@@ -296,7 +296,7 @@ return {
         (ya.target_family() == "windows" and os.getenv("APPDATA") .. "\\yazi\\config\\bookmark") or
         (os.getenv("HOME") .. "/.config/yazi/bookmark")
     state.cli = options.cli or "fzf"
-    state.jump_notify = options.jump_notify or "yes"
+    state.jump_notify = options.jump_notify and true
     -- init the keys
     local keys = options.keys or "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     state.keys = {}
@@ -342,10 +342,10 @@ return {
       action_delete(mb_path, bookmarks, fzf_find(cli, mb_path))
     elseif action == "delete_all" then
       action_delete_all(mb_path)
-		elseif action == "jump_by_key" then
-			action_jump(bookmarks, which_find(bookmarks), jump_notify)
-		elseif action == "jump_by_fzf" then
-			action_jump(bookmarks, fzf_find(cli, mb_path), jump_notify)
+    elseif action == "jump_by_key" then
+      action_jump(bookmarks, which_find(bookmarks), jump_notify)
+    elseif action == "jump_by_fzf" then
+      action_jump(bookmarks, fzf_find(cli, mb_path), jump_notify)
     elseif action == "rename_by_key" then
       action_save(mb_path, bookmarks, which_find(bookmarks))
     elseif action == "rename_by_fzf" then
