@@ -55,6 +55,8 @@ table.insert(bookmarks, {
 require("yamb"):setup {
   -- Optional, the path ending with path seperator represents folder.
   bookmarks = bookmarks,
+  -- Optional, recieve notification everytime you jump.
+  jump_notify = true,
   -- Optional, the cli of fzf.
   cli = "fzf",
   -- Optional, a string used for randomly generating keys, where the preceding characters have higher priority.
