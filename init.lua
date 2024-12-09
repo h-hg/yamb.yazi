@@ -328,8 +328,8 @@ return {
     save_to_file(state.path, bookmarks)
     state.bookmarks = bookmarks
   end,
-  entry = function(self, args)
-    local action = args[1]
+  entry = function(self, jobs)
+    local action = jobs.args[1]
     if not action then
       return
     end
