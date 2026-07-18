@@ -128,7 +128,7 @@ local generate_key = function(bookmarks)
 	local key2rank = get_state_attr("key2rank")
 	local mb = {}
 	for _, item in pairs(bookmarks) do
-		if #item.key == 1 then
+		if #item.key == 1 and key2rank[item.key] then
 			table.insert(mb, item.key)
 		end
 	end
