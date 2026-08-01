@@ -65,7 +65,7 @@ local save_to_file = function(mb_path, bookmarks)
 end
 
 local fzf_find = function(cli, mb_path)
-	local permit = ya.hide()
+	local permit = ui.hide()
 	local cmd = string.format('%s < "%s"', cli, mb_path)
 	local handle = io.popen(cmd, "r")
 	local result = ""
